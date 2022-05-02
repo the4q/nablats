@@ -33,7 +33,7 @@ Nablats generating TypeScript code by the following three steps.
 
 # Sample project
 
-In the [Sample](./Sample/) folder, there is a project created for demonstration. Following contents of this document base on this project.
+In the [Sample](../Sample/server) folder, there is a project created for demonstration. Following contents of this document base on this project.
 
 Mainly used data models is defined as below.
 

@@ -50,11 +50,11 @@ For more details of usage, please see [options](docs/Options.md) or [manual](doc
 
 |Package|Version|Description|
 |-------|-------|-----------|
-|Nabla.TypeScript.Dom||Standalone TypeScript document object model.|
-|Nabla.TypeScript.Tool||Core library of nablats.|
-|Nabla.TypeScript.Tool.Reflection||Provides .NET reflection support|
-|Nabla.TypeScript.Tool.Annotations||Annotation attributes and basic types.|
-|nablats||Executable of this tool.|
+|Nabla.TypeScript.Dom|[![Nuget](https://img.shields.io/nuget/v/Nabla.TypeScript.Dom.svg)](https://nuget.org/packages/Nabla.TypeScript.Dom)|Standalone TypeScript document object model.|
+|Nabla.TypeScript.Tool|[![Nuget](https://img.shields.io/nuget/v/Nabla.TypeScript.Tool.svg)](https://nuget.org/packages/Nabla.TypeScript.Tool)|Core library of nablats.|
+|Nabla.TypeScript.Tool.Reflection|[![Nuget](https://img.shields.io/nuget/v/Nabla.TypeScript.Tool.Reflection.svg)](https://nuget.org/packages/Nabla.TypeScript.Tool.Reflection)|Provides .NET reflection support|
+|Nabla.TypeScript.Tool.Annotations|[![Nuget](https://img.shields.io/nuget/v/Nabla.TypeScript.Tool.Annotations.svg)](https://nuget.org/packages/Nabla.TypeScript.Tool.Annotations)|Annotation attributes and basic types.|
+|nablats|[![Nuget](https://img.shields.io/nuget/v/nablats.svg)](https://nuget.org/packages/nablats)|Executable of this tool.|
 
 # Documentation
 
