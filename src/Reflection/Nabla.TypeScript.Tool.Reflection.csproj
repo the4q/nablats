@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Authors>effun</Authors>
+    <PackageId>Nabla.TypeScript.Tool.Reflection</PackageId>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageOutputPath>../../nupkg</PackageOutputPath>
+    <Description>A implemention of Nablats type discovery and description by .NET reflection.</Description>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\"></None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Nabla.TypeScript.Tool.csproj" />
+  </ItemGroup>
+
+</Project>

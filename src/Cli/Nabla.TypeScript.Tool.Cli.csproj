@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>nablats</AssemblyName>
+    <Version>1.1.0</Version>
+
+    <Authors>effun</Authors>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>dotnet-ts</ToolCommandName>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageOutputPath>../../nupkg</PackageOutputPath>
+    <PackageTags>.NET TypeScript Convert Mapping Generate</PackageTags>
+    <Description>Main executable of Nablats.</Description>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\"></None>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="System.CommandLine.NamingConventionBinder" Version="2.0.0-beta3.22114.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Reflection\Nabla.TypeScript.Tool.Reflection.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,16 @@
+﻿
+.nupkg/
+.vs/
+.vscode/
+.git/
+
+launchSettings.json
+
+Test/
+
+[Bb]in/
+[Oo]bj/
+
+*.user
+
+*.ps1

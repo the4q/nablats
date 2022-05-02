@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Nabla.TypeScript.Tool</RootNamespace>
+    <LangVersion>10.0</LangVersion>
+    <Authors>effun</Authors>
+    <PackageId>Nabla.TypeScript.Tool.Annotations</PackageId>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageOutputPath>../../nupkg</PackageOutputPath>
+    <Description>This package contains several annotation attributes for you to customize the behavior of Nablats for generating code.</Description>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+</Project>

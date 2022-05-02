@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Nabla.TypeScript.Tool</RootNamespace>
+    <Version>1.1.0</Version>
+    <Authors>effun</Authors>
+    <PackageId>Nabla.TypeScript.Tool</PackageId>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageOutputPath>../../nupkg</PackageOutputPath>
+    <Description>This package contains core components for Nablats.</Description>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Annotations\Nabla.TypeScript.Tool.Annotations.csproj" />
+    <ProjectReference Include="..\Dom\Nabla.TypeScript.Dom.csproj" />
+  </ItemGroup>
+
+</Project>
