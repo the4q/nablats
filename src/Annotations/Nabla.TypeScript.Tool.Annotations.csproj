@@ -7,9 +7,11 @@
     <RootNamespace>Nabla.TypeScript.Tool</RootNamespace>
     <LangVersion>10.0</LangVersion>
     <Authors>effun</Authors>
+    <Version>1.0.1</Version>
     <PackageId>Nabla.TypeScript.Tool.Annotations</PackageId>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageOutputPath>../../nupkg</PackageOutputPath>
+    <PackageProjectUrl>https://github.com/the4q/nablats</PackageProjectUrl>
     <Description>This package contains several annotation attributes for you to customize the behavior of Nablats for generating code.</Description>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>

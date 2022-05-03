@@ -5,9 +5,11 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <Authors>effun</Authors>
+    <Version>1.0.1</Version>
     <PackageId>Nabla.TypeScript.Tool.Reflection</PackageId>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageOutputPath>../../nupkg</PackageOutputPath>
+    <PackageProjectUrl>https://github.com/the4q/nablats</PackageProjectUrl>
     <Description>A implemention of Nablats type discovery and description by .NET reflection.</Description>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>

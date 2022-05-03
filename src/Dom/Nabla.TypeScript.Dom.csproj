@@ -6,7 +6,9 @@
     <Nullable>enable</Nullable>
     <RootNamespace>Nabla.TypeScript</RootNamespace>
     <Authors>effun</Authors>
+    <Version>1.0.0</Version>
     <PackageOutputPath>../../nupkg</PackageOutputPath>
+    <PackageProjectUrl>https://github.com/the4q/nablats</PackageProjectUrl>
     <PackageId>Nabla.TypeScript.Dom</PackageId>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Description>This package contains a standalone and self-managed TypeScript DOM.</Description>

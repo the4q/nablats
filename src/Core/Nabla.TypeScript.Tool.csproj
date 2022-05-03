@@ -5,11 +5,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>Nabla.TypeScript.Tool</RootNamespace>
-    <Version>1.1.0</Version>
+    <Version>1.1.1</Version>
     <Authors>effun</Authors>
     <PackageId>Nabla.TypeScript.Tool</PackageId>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageOutputPath>../../nupkg</PackageOutputPath>
+    <PackageProjectUrl>https://github.com/the4q/nablats</PackageProjectUrl>
     <Description>This package contains core components for Nablats.</Description>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
