@@ -18,6 +18,8 @@ public sealed class ReferenceType : TypeBase
         set => Replace(ref _reference, value);
     }
 
+    public override DomNodeKind Kind => DomNodeKind.TypeReference;
+
     public override void Write(TypeWriter writer)
     {
         Reference.Write(writer);

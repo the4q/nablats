@@ -7,4 +7,5 @@ public sealed class PlainTextName : NamedDomNode
     {
     }
 
+    public override DomNodeKind Kind => DomNodeKind.Identifier;
 }

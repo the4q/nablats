@@ -17,6 +17,8 @@ public abstract class DomNode
 
     public DomNode? Parent => _parent;
 
+    public abstract DomNodeKind Kind { get; }
+
     /// <summary>
     /// Gets or sets anything you want to attach to this node.
     /// </summary>

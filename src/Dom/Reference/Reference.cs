@@ -46,6 +46,8 @@ public abstract class Reference : DomNode
 
     public string TargetName => ((INamedNode)Target).Name;
 
+    public override DomNodeKind Kind => DomNodeKind.NodeReference;
+
     public ReferenceType CreateType() => new(this);
 
 }

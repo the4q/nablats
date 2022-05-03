@@ -12,6 +12,8 @@ public class TypeNamespace : NamedDomNode, IExportable
 
     public bool IsLocal { get; internal set; } = true;
 
+    public override DomNodeKind Kind => DomNodeKind.NamespaceDeclaration;
+
     public override void Write(TypeWriter writer)
     {
         if (!IsLocal)

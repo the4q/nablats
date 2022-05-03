@@ -13,6 +13,8 @@ internal sealed class PropertyIterator : NamedDomNode
 
     public TypeBase Provider { get; }
 
+    public override DomNodeKind Kind => DomNodeKind.Identifier;
+
     public override void Write(TypeWriter writer)
     {
         writer

@@ -10,6 +10,8 @@ public class FileReference : Reference
 
     public new TypeFile Target => (TypeFile)base.Target;
 
+    public override DomNodeKind Kind => DomNodeKind.NamespaceImport;
+
     public override void Write(TypeWriter writer)
     {
         writer.Write("/// <reference ")

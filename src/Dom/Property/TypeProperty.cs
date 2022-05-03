@@ -24,6 +24,8 @@ public class TypeProperty : DomNode, INamedNode
 
     public string Name => Identifier.Name;
 
+    public override DomNodeKind Kind => DomNodeKind.Property;
+
     public NamedDomNode Identifier { get; }
 
     public TypeBase Type

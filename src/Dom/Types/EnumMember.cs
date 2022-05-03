@@ -25,6 +25,8 @@ public sealed class EnumMember : NamedDomNode
 
     public object? Value => (object?)_numberValue ?? _stringValue;
 
+    public override DomNodeKind Kind => DomNodeKind.Property;
+
     public override void Write(TypeWriter writer)
     {
         base.Write(writer);

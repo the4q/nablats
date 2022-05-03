@@ -22,6 +22,8 @@ public class ShadowType : GenericType, INamedType
 
     public string Name { get; }
 
+    public override DomNodeKind Kind => DomNodeKind.Unknown;
+
     public override void Write(TypeWriter writer)
     {
         // do not output anything about this type

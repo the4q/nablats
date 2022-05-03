@@ -20,6 +20,8 @@ public sealed class TypeDeclaration : NamedDomNode, IExportable
 
     public bool IsDeclare { get; init; }
 
+    public override DomNodeKind Kind => DomNodeKind.TypeDeclaration;
+
     public override void Write(TypeWriter writer)
     {
         TS.JsDoc(Type)?.Write(writer);
@@ -33,9 +35,4 @@ public sealed class TypeDeclaration : NamedDomNode, IExportable
         Type.Write(writer);
     }
 
-}
-
-internal interface IExportable
-{
-    bool IsLocal { get; }
 }

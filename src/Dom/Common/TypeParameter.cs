@@ -28,6 +28,8 @@ public class TypeParameter : NamedDomNode
 
     public TypeBase? Default { get => _default(); }
 
+    public override DomNodeKind Kind => DomNodeKind.Parameter;
+
     //public ParameterReference CreateReference() => new(this);
 
     public TypeParameter CreateProxy(bool forced)

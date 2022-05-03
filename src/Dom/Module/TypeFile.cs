@@ -29,6 +29,8 @@ public class TypeFile : NamedDomNode
 
     public string FileName => Name + Extension;
 
+    public override DomNodeKind Kind => DomNodeKind.TypeFile;
+
     public virtual ModuleReferenceMode ReferenceMode { get; } = ModuleReferenceMode.Explicit;
 
     public DomNodeCollection<TypeImport> Imports { get; }
@@ -353,6 +355,8 @@ public class TypeFile : NamedDomNode
 
         if (path == null)
             path = $"./{(withExtension ? FileName : Name)}";
+        else if (!withExtension && path.EndsWith(Extension))
+            path = path[..^3];
 
         return path;
     }

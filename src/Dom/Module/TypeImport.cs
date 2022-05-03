@@ -14,14 +14,20 @@ public sealed class TypeImport : Reference
 
     public DomNodeCollection<TypeImportItem> Members { get; }
 
+    public override DomNodeKind Kind => DomNodeKind.ModuleImport;
+
     public override void Write(TypeWriter writer)
     {
         if (Members.TryAppend(All).Any())
         {
             writer.Write("import")
-                .WriteSpace()
-                .Write("type")
                 .WriteSpace();
+
+            if (Members.All(x => (x.Target as TypeBase)?.Kind == DomNodeKind.TypeDefinition))
+            {
+                writer.Write("type")
+                    .WriteSpace();
+            }
 
             if (All != null)
                 All.Write(writer);
