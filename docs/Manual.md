@@ -403,7 +403,7 @@ In case you don't like referencing the runtime irrelevant package `Nabla.TypeScr
 
 The mapping file is in XML format, you can find the schema [here](../src/Core/Mapping/Mapping.xsd). Using of this file is similar to annotation attributes. 
 
-The following example demonstrate the equivalent to the previous section.
+The following example demonstrate the equivalent to the previous two sections.
 
 ```XML
 <Mapping xmlns="http://the4q.com/schemas/nablats/mapping">
@@ -414,6 +414,9 @@ The following example demonstrate the equivalent to the previous section.
                 <Parameter Value="string | undefined" />
             </Overriding>
         </Property>
+    </Type>
+    <Type Source="MyApp.Location" UseTuple="true">
+        <Property Source="Address" TupleOrder="3">
     </Type>
 </Mapping>
 ```
