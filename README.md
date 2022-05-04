@@ -62,6 +62,7 @@ For more details of usage, please see [options](docs/Options.md) or [manual](doc
 
 * [Type discovery](docs/Options.md#type-discovery-options)
 * [Code generating](docs/Options.md#code-generating-options)
+* [Type handling](docs/Options.md#type-handling-options)
 * [Code styling](docs/Options.md#code-styling-options)
 * [Behavior control](docs/Options.md#behavior-control-options)
 * [Letter casing](docs/Options.md#letter-casing)
@@ -73,6 +74,7 @@ For more details of usage, please see [options](docs/Options.md) or [manual](doc
 *   [Customizable data type mapping.](docs/Manual.md#type-overriding)
 *   [Customizable naming strategy for type/property names.](docs/Manual.md#name-handling)
 *   [Nullability information detection and mapping.](docs/Manual.md#nullability-handling)
+*   [External mapping file](docs/Manual.md#external-type-mapping)
 *   [Four ways to arrange generated TypeScript files.](docs/Manual.md#file-arrangement)
 *   [TypeScript namespace support.](docs/Manual.md#namespace-support)
 *   [Additional header or footer contents can be embeded into generated files, with variable support.](docs/Manual.md#content-injection)

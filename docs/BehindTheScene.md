@@ -8,3 +8,8 @@ TypeScript namespace is not an original part of the DOM system design, it came t
 
 Nablats is written in C# and built with .NET 6. It uses a few new features shipped with .NET 6, so that the source code may not be build under previous versions of .NET, unless you make slight changes to the source code yourself.
 
+There're still two kinds of work should be done.
+* Document the whole project.
+* Unit test everything.
+
+I am not sure that I can get them done all by myself, it's massive work to do. If anyone found interesting in this project, maybe you can help.

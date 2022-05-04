@@ -18,6 +18,7 @@
   - [Special CLR types](#special-clr-types)
   - [TypeScript tuple](#typescript-tuple)
   - [Type overriding](#type-overriding)
+  - [External type mapping](#external-type-mapping)
 - [File arrangement](#file-arrangement)
 - [Namespace support](#namespace-support)
 - [Content injection](#content-injection)
@@ -393,6 +394,31 @@ export interface WeatherForecast {
     OverrideDemo?: [number, string | undefined][]
 }
 ```
+
+## External type mapping
+
+Since version 1.2.0, nablats provides external type mapping feature.
+
+In case you don't like referencing the runtime irrelevant package `Nabla.TypeScript.Tool.Annotations`, you can now use a external mapping file to specify how you want to override the default behavior of converting types.
+
+The mapping file is in XML format, you can find the schema [here](../src/Core/Mapping/Mapping.xsd). Using of this file is similar to annotation attributes. 
+
+The following example demonstrate the equivalent to the previous section.
+
+```XML
+<Mapping xmlns="http://the4q.com/schemas/nablats/mapping">
+    <Type Source="MyApp.WeatherForecast">
+        <Property Source="OverrideDemo">
+            <Overriding TypeName="Tuple" ArrayDepth="1">
+                <Parameter Kind="Clr" Value="System.Int32" />
+                <Parameter Value="string | undefined" />
+            </Overriding>
+        </Property>
+    </Type>
+</Mapping>
+```
+
+To use a external mapping file, specify the command-line option `--mapping`.
 
 # File arrangement
 

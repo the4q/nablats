@@ -45,7 +45,7 @@ Default file name for `Explicit` or `Single` arrangement. If omitted, the source
 
 Generate code in [TypeScript namespaces](https://www.typescriptlang.org/docs/handbook/namespaces.html) mode rather than Node modules.
 
-# Serialization handling options
+# Type handling options
 
 `-c`, `--camel-case`
 
@@ -62,6 +62,10 @@ Specify how enum types be mapped. Possible values are `Number`_(DEFAULT)_, `Obje
 `-u`, `--no-nullable`
 
 Disable nullables. See [nullability handling](Manual.md#nullability-handling) section for details.
+
+`--maping`
+
+Path to an external XML type mapping file. See [type mapping](Manual.md#external-type-mapping) section for details.
 
 # Code styling options
 
