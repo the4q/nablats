@@ -1,21 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\Common\PackageInfo.props"/>
+  
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>Nabla.TypeScript</RootNamespace>
-    <Authors>effun</Authors>
     <Version>1.0.1</Version>
-    <PackageOutputPath>../../nupkg</PackageOutputPath>
-    <PackageProjectUrl>https://github.com/the4q/nablats</PackageProjectUrl>
     <PackageId>Nabla.TypeScript.Dom</PackageId>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Description>This package contains a standalone and self-managed TypeScript DOM.</Description>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
-  <ItemGroup>
-    <None Include="README.md" Pack="true" PackagePath="\"></None>
-  </ItemGroup>
+
 </Project>

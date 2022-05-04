@@ -13,6 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nabla.TypeScript.Tool.Refle
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nabla.TypeScript.Tool.Annotations", "src\Annotations\Nabla.TypeScript.Tool.Annotations.csproj", "{E1A3CF1C-2390-4B2E-A05E-F2FC1BA3E287}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{50836B26-5662-46AF-9E69-9CFD0AAAD45C}"
+	ProjectSection(SolutionItems) = preProject
+		src\Common\PackageInfo.props = src\Common\PackageInfo.props
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <PropertyGroup>
+    <Authors>effun</Authors>
+    <PackageOutputPath>../../nupkg</PackageOutputPath>
+    <PackageProjectUrl>https://github.com/the4q/nablats</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>.NET TypeScript Convert Mapping Generate</PackageTags>
+    <Version>1.2.0</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\"></None>
+  </ItemGroup>
+
+</Project>

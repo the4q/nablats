@@ -1,27 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\Common\PackageInfo.props"/>
+
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AssemblyName>nablats</AssemblyName>
-    <Version>1.1.1</Version>
-    <Authors>effun</Authors>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>dotnet-ts</ToolCommandName>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageOutputPath>../../nupkg</PackageOutputPath>
-    <PackageProjectUrl>https://github.com/the4q/nablats</PackageProjectUrl>
-    <PackageTags>.NET TypeScript Convert Mapping Generate</PackageTags>
     <Description>Main executable of Nablats.</Description>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
-  <ItemGroup>
-    <None Include="README.md" Pack="true" PackagePath="\"></None>
-  </ItemGroup>
-  
   <ItemGroup>
     <PackageReference Include="System.CommandLine.NamingConventionBinder" Version="2.0.0-beta3.22114.1" />
   </ItemGroup>
