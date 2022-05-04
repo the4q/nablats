@@ -23,11 +23,13 @@ public interface ISourceDescriptor<TSource>
 
     bool IsTypeScriptTuple(TSource source);
 
-    string Describe(TSource source);
+    int? GetTupleOrder(IPropertyMetaProvider<TSource> property);
+
+    string GetFullName(TSource source);
 
     string ResolveTypeName(TSource source);
 
-    string ResolvePropertyName(IPropertyMetaProvider<TSource> meta);
+    string? GetDedicatedPropertyName(IPropertyMetaProvider<TSource> meta);
 
     TSource? GetBaseType(TSource source);
 
@@ -52,4 +54,13 @@ public interface ISourceDescriptor<TSource>
     CollectionInfo<TSource>? GetCollectionInfo(TSource source);
 
     bool IsRequired(TSource source);
+
+    ITypeOverrideInfo? GetOverridingInfo(IPropertyMetaProvider<TSource> meta);
+
+    bool IsTypeIgnored(TSource source);
+
+    bool IsPropertyIgnored(IPropertyMetaProvider<TSource> meta);
+
+    DateHandling? GetDateHandling(IMetaProvider<TSource> meta);
+
 }

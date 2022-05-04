@@ -11,6 +11,9 @@ public class EnumCreator<TSource> : TypeDefinitionCreator<TSource>
     {
         var info = Descriptor.GetEnumInfo(source);
 
+        if (info != null && info.Handling == null)
+            info.Handling = Factory.Options.EnumHandling;
+
         return new(info != null && info.Handling != EnumHandling.Number, info);
     }
 
@@ -18,16 +21,21 @@ public class EnumCreator<TSource> : TypeDefinitionCreator<TSource>
     {
         EnumTypeInfo info = (EnumTypeInfo)state!;
         TypeBase type;
-        var handling = info.Handling;
+        var handling = info.Handling!.Value;
         var name = Descriptor.ResolveTypeName(source);
+
+        if (handling == EnumHandling.Number)
+            throw new InvalidOperationException("Cannot create definition for enum as number type.");
+
+        var members = info.Members.Select(x => (Factory.ResolvePropertyName(x.Key, info.NamingPolicy), x.Value));
 
         if (handling == EnumHandling.Object || handling == EnumHandling.Const)
         {
-            type = TS.Enum(name, info.Members).IsConst(handling == EnumHandling.Const);
+            type = TS.Enum(name, members.ToArray()).IsConst(handling == EnumHandling.Const);
         }
         else if (handling == EnumHandling.Union)
         {
-            type = TS.Alias(name, TS.Literal(info.Members.Select(x => x.Key)));
+            type = TS.Alias(name, TS.Literal(members.Select(x => x.Item1)));
         }
         else
             throw new NotImplementedException();

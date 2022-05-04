@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Nabla.TypeScript.Tool;
+namespace Nabla.TypeScript.Tool.Reflection;
 
 public sealed class SystemTextJsonSerializationInfo : ISerializationInfo
 {

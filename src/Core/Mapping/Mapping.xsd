@@ -1,0 +1,320 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="mapping"
+    targetNamespace="http://the4q.com/schemas/nablats/mapping"
+    elementFormDefault="qualified"
+    xmlns="http://the4q.com/schemas/nablats/mapping"
+    xmlns:mstns="http://the4q.com/schemas/nablats/mapping"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+  <xs:element name="Mapping">
+    <xs:annotation>
+      <xs:documentation>Mapping settings for Nablats, a command-line tool for converting .NET types to TypeScript.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Defaults" minOccurs="0" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>Default settings.</xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Enum" type="EnumMapping" minOccurs="0">
+                <xs:annotation>
+                  <xs:documentation>Default settings for enum types.</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute type="DateHandling" name="Date" use="optional">
+              <xs:annotation>
+                <xs:documentation>Default handling for date types.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="File" type="FileMapping" maxOccurs="unbounded" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>Mapping file name from the original assembly name to another.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="Type" type="TypeMapping" maxOccurs="unbounded" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>Type mapping settings.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:complexType name="TypeMapping" >
+    <xs:sequence>
+      <xs:element name="Enum" type="EnumMapping" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Mapping settings for enum type, will be ignored when the type is not an enum.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="Property" type="PropertyMapping" maxOccurs="unbounded" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Mapping settings for property.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attributeGroup ref="MappingAttributes"></xs:attributeGroup>
+    <xs:attribute type="xs:boolean" name="Export" use="optional" default="true">
+      <xs:annotation>
+        <xs:documentation>Should export this type. Default is true, set to false to prevent this type been exported.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute type="xs:boolean" name="UseTuple" use="optional" default="false">
+      <xs:annotation>
+        <xs:documentation>Convert this type to TypeScript tuple rather than interface type.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute type="DateHandling" name="Date" use="optional">
+      <xs:annotation>
+        <xs:documentation>How date types within this type should be converted.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <xs:complexType name="FileMapping" >
+    <xs:attributeGroup ref="MappingAttributes"></xs:attributeGroup>
+  </xs:complexType>
+
+  <xs:complexType name="PropertyMapping">
+    <xs:choice minOccurs="0">
+      <xs:element type="TypeOverriding" name="Overriding">
+        <xs:annotation>
+          <xs:documentation>Type overriding settings for this property.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element type="VairantMapping" name="Variant">
+        <xs:annotation>
+          <xs:documentation>Variant type settings for this property, will be ignored if property is not variant.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:choice>
+    <xs:attributeGroup ref="MappingAttributes"></xs:attributeGroup>
+    <xs:attribute type="xs:boolean" name="Export" use="optional" default="true">
+      <xs:annotation>
+        <xs:documentation>Should this property be exported. Default is true, set to false to prevent this property been exported.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute type="xs:int" name="TupleOrder" use="optional">
+      <xs:annotation>
+        <xs:documentation>The order of this property appeared in tuple type. Will be ignored if the declearing type does not exported as TypeScript tuple.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute type="DateHandling" name="Date" use="optional">
+      <xs:annotation>
+        <xs:documentation>How date types should be converted. Will be ignored if the type of property is not a date type.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <xs:complexType name="TypeOverriding">
+    <xs:sequence>
+      <xs:element name="Parameter" minOccurs="0" maxOccurs="unbounded" type="ParameterType">
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="TypeName" use="required">
+      <xs:annotation>
+        <xs:documentation>The target TypeScript type name you want to override with.</xs:documentation>
+      </xs:annotation>
+      <xs:simpleType>
+        <xs:union memberTypes="NativeType InternalOverrideType xs:Name"></xs:union>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="ModuleName" type="xs:anyURI">
+      <xs:annotation>
+        <xs:documentation>Path to a user defined module. The extension ".ts" is not required.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="ArrayDepth" type="xs:unsignedInt" use="optional" default="0">
+      <xs:annotation>
+        <xs:documentation>If you want to create the overriden type in array form, specify a value greater than zero.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <xs:complexType name="ParameterType">
+    <xs:attribute name="Kind" use="optional" default="TypeScript">
+      <xs:annotation>
+        <xs:documentation>Kind of parameter. Default value is "TypeScript".</xs:documentation>
+      </xs:annotation>
+      <xs:simpleType>
+        <xs:restriction base="xs:Name">
+          <xs:enumeration value="TypeScript"></xs:enumeration>
+          <xs:enumeration value="Clr"></xs:enumeration>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="Value" use="required" type="xs:Name">
+      <xs:annotation>
+        <xs:documentation>
+          Name of type. If Kind attribute set to "Clr", you must be sure that the value provided is full name or assembly qualified name.
+          Otherwise provide a TypeScript type name.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <xs:simpleType name="InternalOverrideType">
+    <xs:restriction base="xs:Name">
+      <xs:enumeration value="Tuple"></xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="NativeType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="String"></xs:enumeration>
+      <xs:enumeration value="Number"></xs:enumeration>
+      <xs:enumeration value="Boolean"></xs:enumeration>
+      <xs:enumeration value="Unknown"></xs:enumeration>
+      <xs:enumeration value="Any"></xs:enumeration>
+      <xs:enumeration value="Undefined"></xs:enumeration>
+      <xs:enumeration value="Never"></xs:enumeration>
+      <xs:enumeration value="Null"></xs:enumeration>
+      <xs:enumeration value="Symbol"></xs:enumeration>
+      <xs:enumeration value="Date"></xs:enumeration>
+      <xs:enumeration value="Regex"></xs:enumeration>
+      <xs:enumeration value="Record"></xs:enumeration>
+      <xs:enumeration value="Partial"></xs:enumeration>
+      <xs:enumeration value="Required"></xs:enumeration>
+      <xs:enumeration value="Readonly"></xs:enumeration>
+      <xs:enumeration value="Pick"></xs:enumeration>
+      <xs:enumeration value="Omit"></xs:enumeration>
+      <xs:enumeration value="Exclude"></xs:enumeration>
+      <xs:enumeration value="Extract"></xs:enumeration>
+      <xs:enumeration value="NonNullable"></xs:enumeration>
+      <xs:enumeration value="Parameters"></xs:enumeration>
+      <xs:enumeration value="ConstructorParameters"></xs:enumeration>
+      <xs:enumeration value="ReturnType"></xs:enumeration>
+      <xs:enumeration value="InstanceType"></xs:enumeration>
+      <xs:enumeration value="ThisParameterType"></xs:enumeration>
+      <xs:enumeration value="OmitThisParameter"></xs:enumeration>
+      <xs:enumeration value="ThisType"></xs:enumeration>
+      <xs:enumeration value="Uppercase"></xs:enumeration>
+      <xs:enumeration value="Lowercase"></xs:enumeration>
+      <xs:enumeration value="Capitalize"></xs:enumeration>
+      <xs:enumeration value="Uncapitalize"></xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="VariantHandling">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="AsUnknown">
+        <xs:annotation>
+          <xs:documentation>Convert variant type to unknown.</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="AsGenericParameter">
+        <xs:annotation>
+          <xs:documentation>Convert variant type to a generic parameter.</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="VairantMapping">
+    <xs:attribute name="Handling" type="VariantHandling" default="AsGenericParameter">
+      <xs:annotation>
+        <xs:documentation>How to convert this variant type. Default value is "AsGenericParameter".</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="GenericParameterName" type="xs:Name">
+      <xs:annotation>
+        <xs:documentation>The name of generic parameter. If omitted, the parameter name will be generated as "property_name + 'Type'".</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <xs:simpleType name="DateHandling">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="String">
+        <xs:annotation>
+          <xs:documentation>Convert date type to string. This is the default behavior.</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Date">
+        <xs:annotation>
+          <xs:documentation>Convert date type to JavaScript native Date type.</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Number">
+        <xs:annotation>
+          <xs:documentation>Convert date type to number.</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="EnumHandling">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Number">
+        <xs:annotation>
+          <xs:documentation>Convert enum type to number. This is the default behavior.</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Object">
+        <xs:annotation>
+          <xs:documentation>Convert enum type to TypeScript enum object.</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Const">
+        <xs:annotation>
+          <xs:documentation>Convert enum type to TypeScript const enum.</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Union">
+        <xs:annotation>
+          <xs:documentation>Convert enum type a name-only union type.</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="PropertyNamingPolicy">
+    <xs:restriction base="xs:Name">
+      <xs:enumeration value="Unchanged">
+        <xs:annotation>
+          <xs:documentation>Do not change the name.</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="CamelCase">
+        <xs:annotation>
+          <xs:documentation>Change the name to camel-case.</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:attributeGroup name="MappingAttributes">
+    <xs:attribute name="Source" use="required" type="xs:Name">
+      <xs:annotation>
+        <xs:documentation>The original name of a type or property.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="Target" use="optional" type="xs:Name">
+      <xs:annotation>
+        <xs:documentation>The name you want to be converted to. If specified, no naming policy will be applied.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:attributeGroup>
+
+  <xs:complexType name="EnumMapping">
+    <xs:attribute name="Handling" type="EnumHandling">
+      <xs:annotation>
+        <xs:documentation>
+          How the enum type should be converted.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="NamingPolicy" type="PropertyNamingPolicy">
+      <xs:annotation>
+        <xs:documentation>
+          How the enum member should be named.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+</xs:schema>

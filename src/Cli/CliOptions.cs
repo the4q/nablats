@@ -49,6 +49,8 @@ public class CliOptions
 
     public bool NoNullable { get; set; }
 
+    public string? Mapping { get; set; }
+
 #if DEBUG
     public bool Debug { get; set; }
 

@@ -78,10 +78,25 @@ internal class TypeScriptGenerator
         return true;
     }
 
+    private Mapping.MappingSchema? GetMapping()
+    {
+        Mapping.MappingSchema? mapping;
+
+        if (Options.Mapping != null)
+        {
+            mapping = Mapping.MappingSchema.Load(Options.Mapping);
+        }
+        else
+            mapping = null;
+
+        return mapping;
+    }
+
     public async Task<AppReturnCode> RunAsync()
     {
         if (!TryLoadAssembly(out var assembly, out var code))
             return code;
+
 
         FileFactory factory = new ReflectionFileFactory(assembly,
                                                         CreateSerializationInfo(Options),
@@ -96,7 +111,8 @@ internal class TypeScriptGenerator
                                                         },
                                                         Options.Strategy)
         {
-            DiscovererTypeName = Options.Discoverer
+            DiscovererTypeName = Options.Discoverer,
+            Mapping = GetMapping(),
         };
 
         var stopWatch = Stopwatch.StartNew();

@@ -41,13 +41,13 @@ public class RecordCreator<TSource> : TypeDefinitionCreator<TSource>
         var info = (RecordTypeInfo<TSource>)state!;
 
         if (Descriptor.IsTypeParameter(info.Key))
-            throw new CodeException($"Key type must be explicitly specified for dictionary derrived type {Descriptor.Describe(source)}.");
+            throw new CodeException($"Key type must be explicitly specified for dictionary derrived type {Descriptor.GetFullName(source)}.");
 
 
         var genArgs = Descriptor.GetGenericArguments(source);
 
         if (genArgs.Count != (Descriptor.IsTypeParameter(info.Value) ? 1 : 0))
-            throw new CodeException($"Dictionary type {Descriptor.Describe(source)} contains extra generic paramters that is not allowed.");
+            throw new CodeException($"Dictionary type {Descriptor.GetFullName(source)} contains extra generic paramters that is not allowed.");
 
         TypeBase vt;
 

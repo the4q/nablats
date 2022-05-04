@@ -11,12 +11,10 @@ namespace Nabla.TypeScript.Tool.Reflection
     internal class ReflectionSourceDescriptor : ISourceDescriptor<Type>
     {
         private readonly ISerializationInfo _serialization;
-        private readonly CodeOptions _options;
 
-        public ReflectionSourceDescriptor(ISerializationInfo serialization, CodeOptions options)
+        public ReflectionSourceDescriptor(ISerializationInfo serialization)
         {
             _serialization = serialization;
-            _options = options;
         }
 
         public IPropertyRelatedMetaProvider<Type> CreateArrayElementMetaProvider(IPropertyMetaProvider<Type> property)
@@ -30,7 +28,7 @@ namespace Nabla.TypeScript.Tool.Reflection
             return ((MemberSite)property).GenericArgument(argumentIndex);
         }
 
-        public string Describe(Type source)
+        public string GetFullName(Type source)
         {
             return source.FullName!;
         }
@@ -70,9 +68,9 @@ namespace Nabla.TypeScript.Tool.Reflection
 
                 var attr = source.CascadeGetCustomAttribute<TsEnumHandlingAttribute>();
                 Dictionary<string, long> members = new(names.Select((x, i) =>
-                    new KeyValuePair<string, long>(ResolvePropertyName(x, attr?.GetNamingPolicy()), Convert.ToInt64(values.GetValue(i)))));
+                    new KeyValuePair<string, long>(x, Convert.ToInt64(values.GetValue(i)))));
 
-                return new(members, attr?.Handling ?? _options.EnumHandling);
+                return new(members, attr?.Handling, attr?.GetNamingPolicy());
             }
 
             return null;
@@ -95,27 +93,14 @@ namespace Nabla.TypeScript.Tool.Reflection
 
         public TypeScriptPrimitive? GetPrimitive(Type source, IMetaProvider<Type>? meta)
         {
-            var primitveType = TypeUtils.GetPrimitiveType(source);
+            return TypeUtils.GetPrimitiveType(source);
+        }
 
-            if (primitveType != null)
-            {
-                if (primitveType.Value == TypeScriptPrimitive.Date)
-                {
-                    var handling = (meta as MemberSite)?.Member
+        public DateHandling? GetDateHandling(IMetaProvider<Type> meta)
+        {
+            return (meta as MemberSite)?.Member
                         .CascadeGetCustomAttribute<TsDateHandlingAttribute>()?
-                        .Handling ?? _options.DateHandling;
-
-                    primitveType = handling switch
-                    {
-                        DateHandling.Number => TypeScriptPrimitive.Number,
-                        DateHandling.Date => TypeScriptPrimitive.Date,
-                        _ => TypeScriptPrimitive.String
-                    };
-                }
-
-            }
-
-            return primitveType;
+                        .Handling;
         }
 
         public IEnumerable<IPropertyMetaProvider<Type>> GetProperties(Type source, bool includeBaseTypes)
@@ -127,14 +112,22 @@ namespace Nabla.TypeScript.Tool.Reflection
 
             foreach (var member in source.GetMembers(bindingFlags))
             {
-                if (member is not PropertyInfo or FieldInfo ||
-                    _serialization.IsIgnored(member) ||
-                    member.IsDefined(typeof(TsIgnoreAttribute)))
+                if (member is not PropertyInfo or FieldInfo)
                     continue;
 
                 yield return MemberSite.Create(member);
             }
 
+        }
+
+        public bool IsPropertyIgnored(IPropertyMetaProvider<Type> meta)
+        {
+            if (meta is MemberSite member)
+            {
+                return _serialization.IsIgnored(member.Member) || member.Member.IsDefined(typeof(TsIgnoreAttribute));
+            }
+
+            return false;
         }
 
         public Type GetTypeDefinition(Type source)
@@ -196,6 +189,14 @@ namespace Nabla.TypeScript.Tool.Reflection
             return source.IsDefined(typeof(TsTupleAttribute));
         }
 
+        public int? GetTupleOrder(IPropertyMetaProvider<Type> property)
+        {
+            var member = property as MemberSite;
+
+            return member?.Member.GetCustomAttribute<TsTupleOrderAttribute>()?.Order;
+
+        }
+
         public bool IsTypeDefinition(Type source)
         {
             return source.IsTypeDefinition;
@@ -206,28 +207,12 @@ namespace Nabla.TypeScript.Tool.Reflection
             return source.IsGenericParameter;
         }
 
-        private string ResolvePropertyName(string name, PropertyNamingPolicy? policy = null)
-        {
-            if (policy == null)
-                policy = _options.NamingPolicy;
 
-            if (policy == PropertyNamingPolicy.Unchanged)
-                return name;
-
-            return _serialization.ExecutePolicy(name, policy.Value);
-        }
-
-        public string ResolvePropertyName(IPropertyMetaProvider<Type> meta)
+        public string? GetDedicatedPropertyName(IPropertyMetaProvider<Type> meta)
         {
             var property = (MemberSite)meta;
-            var name = _serialization.GetDedicatedFieldName(property.Member);
+            return _serialization.GetDedicatedFieldName(property.Member);
 
-            if (name == null)
-            {
-                name = ResolvePropertyName(property.Member.Name, null);
-            }
-
-            return name;
         }
 
         private static string ResolveTypeName(Type clrType, TsTypeNameAttribute? attr)
@@ -262,5 +247,16 @@ namespace Nabla.TypeScript.Tool.Reflection
         {
             return ResolveTypeName(source, source.GetCustomAttribute<TsTypeNameAttribute>(false));
         }
+
+        public ITypeOverrideInfo? GetOverridingInfo(IPropertyMetaProvider<Type> meta)
+        {
+            return (meta as MemberSite)?.Member.GetCustomAttribute<TsTypeOverrideAttribute>();
+        }
+
+        public bool IsTypeIgnored(Type source)
+        {
+            return source.IsDefined(typeof(TsIgnoreAttribute));
+        }
+
     }
 }

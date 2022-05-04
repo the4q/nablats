@@ -1,12 +1,10 @@
 ﻿using System.Reflection;
 
-namespace Nabla.TypeScript.Tool;
+namespace Nabla.TypeScript.Tool.Reflection;
 
-public interface ISerializationInfo
+public interface ISerializationInfo : IPropertyNameResolver
 {
     string? GetDedicatedFieldName(MemberInfo member);
-
-    string ExecutePolicy(string name, PropertyNamingPolicy namingPolicy);
 
     bool IsVariantType(Type type);
 

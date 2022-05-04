@@ -5,11 +5,12 @@ public interface IPropertyMetaProvider<TSource> : IMetaProvider<TSource>
 {
     string Name { get; }
 
-    ITypeOverrideInfo? TypeOverride { get; }
+    //ITypeOverrideInfo? TypeOverride { get; }
+
+    TSource DeclaringSource { get; }
 
     bool IsReadOnly { get; }
 
-    int? TupleOrder { get; }
 }
 
 //public abstract class TypeMemberInfo<TSource> : IMetaProvider<TSource>, ITypeMember

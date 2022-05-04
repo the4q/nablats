@@ -5,11 +5,13 @@ namespace Nabla.TypeScript.Tool.Reflection;
 public class ReflectionFileFactory : FileFactory
 {
     private readonly Assembly _assembly;
+    private readonly ISerializationInfo _serializationInfo;
 
     public ReflectionFileFactory(Assembly assembly, ISerializationInfo serializationInfo, FileOrganizer organizer, CodeOptions options, TypeDiscoveryStrategy strategy)
-        : base(serializationInfo, organizer, options)
+        : base(organizer, options)
     {
         _assembly = assembly;
+        _serializationInfo = serializationInfo;
         Strategy = strategy;
     }
 
@@ -24,7 +26,7 @@ public class ReflectionFileFactory : FileFactory
 
     protected override ITypeFactory CreateTypeFactory()
     {
-        return new TypeFactory<Type>(this, new ReflectionSourceDescriptor(SerializationInfo, Options));
+        return new TypeFactory<Type>(this, new ReflectionSourceDescriptor(_serializationInfo), _serializationInfo);
     }
 
     protected override string? ResolveDesiredModuleName(object source)

@@ -22,7 +22,7 @@ namespace Nabla.TypeScript.Tool
         {
             List<TypeBase> types = new();
 
-            foreach (var property in Descriptor.GetProperties(source, true).OrderBy(x => x.TupleOrder ?? 0))
+            foreach (var property in Descriptor.GetProperties(source, true).OrderBy(x => Descriptor.GetTupleOrder(x) ?? 0))
             {
                 types.Add(CreatePropertyType(property));
             }

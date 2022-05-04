@@ -10,9 +10,8 @@ public abstract class FileFactory : IFileFactory
     private readonly Dictionary<string, TypeBase> _utilities;
     private Dictionary<string, TypeFile>? _shadows;
 
-    public FileFactory(ISerializationInfo serializationInfo, FileOrganizer organizer, CodeOptions options)
+    public FileFactory(FileOrganizer organizer, CodeOptions options)
     {
-        SerializationInfo = serializationInfo ?? throw new ArgumentNullException(nameof(serializationInfo));
         _organizer = organizer;
         Options = options;
         _files = new();
@@ -20,12 +19,11 @@ public abstract class FileFactory : IFileFactory
 
     }
 
-
     public ICollection<TypeFile> Files => _files.Values;
 
-    public ISerializationInfo SerializationInfo { get; }
-
     public CodeOptions Options { get; }
+
+    public Mapping.MappingSchema? Mapping { get; init; }
 
     public ICollection<TypeFile> CreateFiles()
     {
@@ -104,6 +102,15 @@ public abstract class FileFactory : IFileFactory
     {
         if (source == UtilityFactory.Token)
             return UtilityFactory.ModuleName;
+
+        if (Mapping?.Files != null)
+        {
+            var name0 = _organizer.NameResolver.ResolveFileName(source);
+            var mapping = Mapping.GetFileMapping(name0);
+
+            if (mapping?.Target != null)
+                return mapping.Target;
+        }
 
         return ResolveDesiredModuleName(source);
     }

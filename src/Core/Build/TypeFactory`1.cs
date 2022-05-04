@@ -17,14 +17,16 @@ public class TypeFactory<TSource> : ITypeFactory
     private readonly Stack<TSource> _buildingDefinitions;
     private readonly ISourceDescriptor<TSource> _descriptor;
     private readonly TypeCreator<TSource>[] _pipeline;
+    private readonly IPropertyNameResolver _propertyNameResolver;
 
-    public TypeFactory(FileFactory factory, ISourceDescriptor<TSource> descriptor)
+    public TypeFactory(FileFactory factory, ISourceDescriptor<TSource> descriptor, IPropertyNameResolver propertyNameResolver)
     {
         FileFactory = factory;
+        _propertyNameResolver = propertyNameResolver;
         _definitions = new();
         _unsolved = new();
         _buildingDefinitions = new();
-        _descriptor = descriptor;
+        _descriptor = factory.Mapping != null ? new Mapping.MappingSourceDescriptor<TSource>(descriptor, factory.Mapping) : descriptor;
         _pipeline = InitializeTypeCreators().ToArray();
     }
 
@@ -32,7 +34,7 @@ public class TypeFactory<TSource> : ITypeFactory
 
     public FileFactory FileFactory { get; }
 
-    public ISerializationInfo SerializationInfo => FileFactory.SerializationInfo;
+    public CodeOptions Options => FileFactory.Options;
 
     protected virtual IEnumerable<TypeCreator<TSource>> InitializeTypeCreators()
     {
@@ -46,16 +48,20 @@ public class TypeFactory<TSource> : ITypeFactory
         yield return new InterfaceCreator<TSource>(this);
     }
 
-    TypeBase ITypeFactory.CreateType(object source)
+    void ITypeFactory.CreateType(object source)
     {
         if (source is not TSource source1)
             throw new ArgumentException($"Source type {source.GetType()} is not acceptable, requires {typeof(TSource)}.");
 
-        return CreateType(source1);
+        if (!Descriptor.IsTypeIgnored(source1))
+            CreateType(source1);
     }
 
     public virtual TypeBase CreateType(TSource source)
     {
+        //if (!Descriptor.IsExplicit(source) && Descriptor.IsTypeIgnored(source))
+        //    return Define(source, () => TS.Native.Unknown());
+
         return CreateDefinition(source);
     }
 
@@ -135,7 +141,7 @@ public class TypeFactory<TSource> : ITypeFactory
             defer.Solve((ReferenceType)type);
         }
         else
-            throw new InvalidOperationException("Unable to solve defered type " + _descriptor.Describe(defer.Source));
+            throw new InvalidOperationException("Unable to solve defered type " + _descriptor.GetFullName(defer.Source));
 
     }
 
@@ -152,7 +158,7 @@ public class TypeFactory<TSource> : ITypeFactory
     protected TypeBase CreateDefinition(TSource source)
     {
         if (!_descriptor.IsTypeDefinition(source))
-            throw new ArgumentException($"{_descriptor.Describe(source)} is not a type definition.", nameof(source));
+            throw new ArgumentException($"{_descriptor.GetFullName(source)} is not a type definition.", nameof(source));
 
         return Define(source, () =>
         {
@@ -172,7 +178,7 @@ public class TypeFactory<TSource> : ITypeFactory
             }
 
             if (type == null)
-                throw new InvalidOperationException($"Unable to create type definition for {Descriptor.Describe(source)}");
+                throw new InvalidOperationException($"Unable to create type definition for {Descriptor.GetFullName(source)}");
 
             var lastest = _buildingDefinitions.Pop();
 
@@ -188,6 +194,9 @@ public class TypeFactory<TSource> : ITypeFactory
         if (_definitions.TryGetValue(source, out var type))
             return TS.CreateReference(type, null);
 
+        if (Descriptor.IsTypeIgnored(source))
+            return TS.Native.Unknown();
+
         foreach (var creator in _pipeline)
         {
             HitTestResult hit = creator.HitTest(source);
@@ -200,7 +209,7 @@ public class TypeFactory<TSource> : ITypeFactory
         }
 
         if (type == null)
-            throw new InvalidOperationException($"Unable to create type reference for {Descriptor.Describe(source)}");
+            throw new InvalidOperationException($"Unable to create type reference for {Descriptor.GetFullName(source)}");
 
         if (!FileFactory.Options.DisableNullable && meta.IsNullable && !meta.IsTypeMember)
         {
@@ -260,7 +269,7 @@ public class TypeFactory<TSource> : ITypeFactory
 
     public TypeBase UseTypeOverride(IPropertyMetaProvider<TSource> meta)
     {
-        var ova = meta.TypeOverride;
+        ITypeOverrideInfo? ova = Descriptor.GetOverridingInfo(meta);
 
         if (ova == null ||ova.TypeName == null)
             throw new ArgumentException("Invalid property meta.");
@@ -271,7 +280,7 @@ public class TypeFactory<TSource> : ITypeFactory
 
         if (moduleName == null)
         {
-            if (TryInternalTypeOverride(meta, out type))
+            if (TryInternalTypeOverride(meta, ova, out type))
                 return type;
 
             if (TS.Native.TryGetExportedType(typeName, out type))
@@ -289,10 +298,10 @@ public class TypeFactory<TSource> : ITypeFactory
         return type.Reference(typeParameters?.Select(x => ResolveTypeOverrideParameter(x, meta)).ToArray() ?? Array.Empty<TypeBase>());
     }
 
-    protected virtual bool TryInternalTypeOverride(IPropertyMetaProvider<TSource> meta, [NotNullWhen(true)]out TypeBase? type)
+    protected virtual bool TryInternalTypeOverride(IPropertyMetaProvider<TSource> meta, ITypeOverrideInfo ova, [NotNullWhen(true)]out TypeBase? type)
     {
-        var typeName = meta.TypeOverride!.TypeName;
-        var typeParameters = meta.TypeOverride!.TypeParameters;
+        var typeName = ova.TypeName;
+        var typeParameters = ova.TypeParameters;
 
         if (Enum.TryParse<TypeScriptPrimitive>(typeName, true, out var primitive))
         {
@@ -318,6 +327,32 @@ public class TypeFactory<TSource> : ITypeFactory
         return new TupleType(typeParameters.Select(x => ResolveTypeOverrideParameter(x, meta)));
     }
 
+    public string ResolvePropertyName(string name, PropertyNamingPolicy? policy)
+    {
+        if (policy == null)
+            policy = FileFactory.Options.NamingPolicy;
+
+        if (policy == PropertyNamingPolicy.Unchanged)
+            return name;
+
+        return _propertyNameResolver.ExecutePolicy(name, policy.Value);
+    }
+
+    public string ResolvePropertyName(IPropertyMetaProvider<TSource> meta)
+    {
+        var name = Descriptor.GetDedicatedPropertyName(meta);
+
+        if (name == null)
+            name = ResolvePropertyName(meta.Name, null);
+
+        return name;
+    }
 
     protected delegate bool TryCreateTypeDelegate(TSource source, [NotNullWhen(true)] out TypeBase? type);
+}
+
+public interface IPropertyNameResolver
+{
+    string ExecutePolicy(string name, PropertyNamingPolicy namingPolicy);
+
 }

@@ -56,6 +56,7 @@ static class Program
             .AddOption<DateHandling>("date", "How date types be mapped.", 'd', getDefault: () => default)
             .AddOption<EnumHandling>("enum", "How enum types be mapped.", 'e', getDefault: () => default)
             .AddOption<bool>("no-nullable", "Disable nullables", 'u')
+            .AddOption<string>("mapping", "Path to the type mapping file")
             .AddOption<bool>("compact", "Compact output file by eliminating blank lines.", 'P')
             .AddOption<bool>("double-quote", "Use double-quote for string literals.", 'D')
             .AddOption("indent-size", "Indent size, will ignored when using tab indent.", 'I', getDefault: () => TypeWriterOptions.DefaultIndentSize, argHelp: "num_of_space")

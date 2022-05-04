@@ -1,18 +1,33 @@
 ﻿namespace Nabla.TypeScript.Tool;
 
-public class PrimitiveCreator<TSouce> : TypeCreator<TSouce>
-    where TSouce : notnull
+public class PrimitiveCreator<TSource> : TypeCreator<TSource>
+    where TSource : notnull
 {
-    public PrimitiveCreator(TypeFactory<TSouce> factory) : base(factory)
+    public PrimitiveCreator(TypeFactory<TSource> factory) : base(factory)
     {
     }
 
-    public override TypeBase CreateReference(TSouce source, IMetaProvider<TSouce> meta, object? state)
+    public override TypeBase CreateReference(TSource source, IMetaProvider<TSource> meta, object? state)
     {
-        return TS.Native.Primitive(Descriptor.GetPrimitive(source, meta)!.Value);
+        TypeScriptPrimitive primitive = Descriptor.GetPrimitive(source, meta)!.Value;
+
+        if (primitive == TypeScriptPrimitive.Date)
+        {
+            var handling = Descriptor.GetDateHandling(meta) ?? Factory.Options.DateHandling;
+
+            primitive = handling switch
+            {
+                DateHandling.Number => TypeScriptPrimitive.Number,
+                DateHandling.Date => TypeScriptPrimitive.Date,
+                _ => TypeScriptPrimitive.String
+            };
+
+        }
+
+        return TS.Native.Primitive(primitive);
     }
 
-    public override HitTestResult HitTest(TSouce source)
+    public override HitTestResult HitTest(TSource source)
     {
         return new(Descriptor.IsPrimitive(source));
     }

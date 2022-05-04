@@ -10,7 +10,7 @@ public abstract class TypeDefinitionCreator<TSource> : TypeCreator<TSource>
     public TypeBase CreateDefinition(TSource source, object? state)
     {
         if (!Descriptor.IsTypeDefinition(source))
-            throw new ArgumentException($"{Descriptor.Describe(source)} is not a type definition.");
+            throw new ArgumentException($"{Descriptor.GetFullName(source)} is not a type definition.");
 
         return CreateDefinitionCore(source, state);
     }

@@ -10,7 +10,6 @@ internal class MemberSite : ISite, IPropertyMetaProvider<Type>, IPropertyRelated
         Nullability = nullability;
         IsTypeMember = isTypeMember;
         UnderlyingType = Nullable.GetUnderlyingType(nullability.Type) ?? nullability.Type;
-        TupleOrder = member.GetCustomAttribute<TsTupleOrderAttribute>()?.Order;
     }
 
     public MemberInfo Member { get; }
@@ -23,15 +22,13 @@ internal class MemberSite : ISite, IPropertyMetaProvider<Type>, IPropertyRelated
 
     Type ISite.ReferencingType => MemberType;
 
-    public Type UnderlyingType { get; }
+    Type IPropertyMetaProvider<Type>.DeclaringSource => Member.DeclaringType!;
 
-    public int? TupleOrder { get; }
+    public Type UnderlyingType { get; }
 
     public bool IsNullable => Nullability.ReadState != NullabilityState.NotNull || Nullability.WriteState != NullabilityState.NotNull;
 
     string IPropertyMetaProvider<Type>.Name => Member.Name;
-
-    public ITypeOverrideInfo? TypeOverride { get; init; }
 
     public bool IsReadOnly { get; init; }
 
@@ -65,11 +62,7 @@ internal class MemberSite : ISite, IPropertyMetaProvider<Type>, IPropertyRelated
         else
             throw new ArgumentException("Invalid member type: " + member.MemberType);
 
-        var ova = member.GetCustomAttribute<TsTypeOverrideAttribute>();
 
-        return new(member, info, true)
-        {
-            TypeOverride = ova,
-        };
+        return new(member, info, true);
     }
 }

@@ -41,7 +41,8 @@ public class InterfaceCreator<TSource> : TypeDefinitionCreator<TSource>
 
         foreach (var member in Descriptor.GetProperties(source, false))
         {
-            properties.Add(CreateProperty(member));
+            if (!Descriptor.IsPropertyIgnored(member))
+                properties.Add(CreateProperty(member));
         }
 
         return TS.Interface(name, baseType, properties.ToArray());
@@ -51,14 +52,14 @@ public class InterfaceCreator<TSource> : TypeDefinitionCreator<TSource>
     {
         TypeBase type = CreatePropertyType(member);
 
-        return TS.Property(Descriptor.ResolvePropertyName(member), type, isOptional: member.IsNullable, isReadonly: member.IsReadOnly);
+        return TS.Property(Factory.ResolvePropertyName(member), type, isOptional: member.IsNullable, isReadonly: member.IsReadOnly);
     }
 
     protected TypeBase CreatePropertyType(IPropertyMetaProvider<TSource> member)
     {
         TypeBase type;
 
-        var ova = member.TypeOverride;
+        var ova = Descriptor.GetOverridingInfo(member);
 
         if (ova != null)
         {
